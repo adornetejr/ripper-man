@@ -1,0 +1,170 @@
+from graphics import *
+from random import *
+
+janela = GraphWin("Janela",96,180,autoflush = False)
+fundo = Image(Point(48,90),"fundo.png")
+fundo.draw(janela)
+arvre = Image(Point(48,90),"arvore.png")
+arvre.draw(janela)
+
+while True:
+	arvoreE = [0,0,0,0,0]
+	arvoreD = [0,0,0,0,0]
+
+	arvoreECircle = []
+	galho = Image(Point(16,0),"galho.png")
+	arvoreECircle.append(galho)
+	arvoreECircle.append(galho)
+	arvoreECircle.append(galho)
+	arvoreECircle.append(galho)
+	arvoreECircle.append(galho)
+
+	arvoreDCircle = []
+	galho = Image(Point(48,0),"galho2.png")
+	arvoreDCircle.append(galho)
+	arvoreDCircle.append(galho)
+	arvoreDCircle.append(galho)
+	arvoreDCircle.append(galho)
+	arvoreDCircle.append(galho)
+
+	tempo = 95
+	tempoJog = 0
+	timer = Text(Point(48,170),tempo)
+
+	jogPos = 0
+	jogCircle = Image(Point((jogPos*48),160),"HOMIN.png")
+	jogPont = 0
+			
+	pontos = Text(Point(48,30),jogPont)
+	pontos.draw(janela)
+
+	jogocomecou = False
+
+	menu = Image(Point(48,90),"comeco.png")
+	menu.draw(janela)
+
+
+	while tempo > 0:
+		timer.undraw()
+		time.sleep(0.1)
+		tecla = janela.checkKey()
+		if(tecla != ''):
+			if(jogocomecou == False):
+				tempo = 95
+				jogocomecou = True
+			menu.undraw()
+			if(tempo + 3 < 95):
+				tempo += 3
+			else:
+				tempo = 95
+			jogPont += 5
+			if(tecla == "A" or tecla == "a"):
+				jogPos = 0
+			elif(tecla == "D" or tecla == "d"):
+				jogPos = 1
+	
+	
+			cont = 0
+			while(cont < len(arvoreE)):
+				arvoreECircle[cont].undraw()
+				arvoreDCircle[cont].undraw()
+				cont += 1
+			pontos.undraw()
+			timer.undraw()	
+			jogCircle.undraw()
+	
+			arvoreE[4] = arvoreE[3]
+			arvoreE[3] = arvoreE[2]
+			arvoreE[2] = arvoreE[1]
+			arvoreE[1] = arvoreE[0]
+			arvoreE[0] = 0
+
+			arvoreD[4] = arvoreD[3]
+			arvoreD[3] = arvoreD[2]
+			arvoreD[2] = arvoreD[1]
+			arvoreD[1] = arvoreD[0]
+			arvoreD[0] = 0
+
+			#print(jogPont)
+		
+			lado = randint(0,2)
+			if(lado == 0):
+				if(arvoreD[0] != 1 and arvoreD[1] != 1):
+					arvoreE[0] = 1
+			elif(lado == 1):
+				if(arvoreE[0] != 1 and arvoreE[1] != 1):
+					arvoreD[0] = 1
+	
+			cont = 0
+			x = 16
+			y = 16
+			while(cont < len(arvoreECircle)):
+				arvoreECircle[cont] = Circle(Point(x,y),16)
+				if(arvoreE[cont] == 1):
+					arvoreECircle[cont] = Image(Point(x,y),"galho.png")
+				else:
+					arvoreECircle[cont] = Image(Point(x,y),"vazio.png")
+				arvoreECircle[cont].draw(janela)
+				y += 32
+				cont += 1
+	
+			cont = 0
+			x = 80
+			y = 16
+			while(cont < len(arvoreDCircle)):
+				arvoreDCircle[cont] = Circle(Point(x,y),16)
+				if(arvoreD[cont] == 1):
+					arvoreDCircle[cont] = Image(Point(x,y),"galho2.png")
+				else:
+					arvoreDCircle[cont] = Image(Point(x,y),"vazio.png")
+				arvoreDCircle[cont].draw(janela)
+				y += 32
+				cont += 1
+			x = 0
+			if(jogPos == 1):
+				x = 80
+			else:
+				x = 16
+
+			if((jogPos == 0 and arvoreE[4] == 1) or (jogPos == 1 and arvoreD[4] == 1)):
+				print("Morreu")
+				break
+			
+			pontos = Text(Point(48,30),jogPont)
+			pontos.setFill("white")
+			pontos.draw(janela)
+
+			jogCircle = Image(Point(x,145),"HOMIN.png")
+			jogCircle.draw(janela)
+		if(jogocomecou == True):
+			tempoJog += 1
+			tempo -= 2
+			print(tempo)
+			timer = Rectangle(Point(1,160),Point(tempo,180))
+			timer.setFill("red")
+			timer.draw(janela)
+			janela.flush()
+	
+	
+	timer.undraw()
+	cont = 0
+	while(cont < len(arvoreE)):
+		arvoreECircle[cont].undraw()
+		arvoreDCircle[cont].undraw()
+		cont += 1
+	timer.undraw()	
+	jogCircle.undraw()
+
+	fim = Image(Point(48,90),"pont.png")
+	fim.draw(janela)
+	texto = Text(Point(48,50),jogPont)
+	texto.setSize(15)
+	texto.setFill("white")
+	texto.draw(janela)
+
+	while(tecla != "space"):
+		tecla = janela.getKey()
+	fim.undraw()
+	texto.undraw()
+
+
